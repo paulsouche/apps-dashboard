@@ -1,0 +1,11 @@
+{
+  "dateEnd": "Date de fin",
+  "dateStart": "Date de début",
+  "errorRetrievingData": "Une erreur est survenue pendant la récupération de la donnée...<br/>Merci d'essayer réduire la plage de dates",
+  "expenditure": "Dépenses",
+  "invalidDate": "Format de date invalide {{text}}",
+  "invalidDateRange": "Plage de dates invalides",
+  "requiredField": "Ce champs est requis",
+  "revenue": "Recettes",
+  "total": "Total"
+}

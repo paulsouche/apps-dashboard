@@ -1,0 +1,27 @@
+@import "../../../../style/variables";
+
+:host {
+  // ie 11 hack
+  flex: 5;
+  position: relative;
+  padding: $spacing-md;
+}
+
+.dashboard-table {
+  width: 100%;
+  height: 100%;
+
+  /deep/ &__group {
+    font-size: 1.3em;
+    font-weight: 700;
+  }
+
+  /deep/ &__sub-group {
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+
+  /deep/ &__cell {
+    color: gray;
+  }
+}
