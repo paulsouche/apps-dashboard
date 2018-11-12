@@ -1,0 +1,80 @@
+{
+  "name": "apps-dashboard",
+  "version": "1.0.0-alpha.0",
+  "description": "Angular dashboard",
+  "author": "Paul Souche <paul.souche@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf www && webpack",
+    "clean": "rimraf www coverage",
+    "lint": "tslint \"**/*.ts\" \"**/*.js\" -e \"node_modules/**\" && stylelint \"**/*.scss\"",
+    "start": "webpack-dev-server -d --open",
+    "test": "jest --coverage",
+    "test-watch": "jest --watch"
+  },
+  "dependencies": {
+    "@angular/animations": "^7.0.0",
+    "@angular/common": "^7.0.0",
+    "@angular/compiler": "^7.0.0",
+    "@angular/compiler-cli": "^7.0.0",
+    "@angular/core": "^7.0.0",
+    "@angular/forms": "^7.0.0",
+    "@angular/platform-browser": "^7.0.0",
+    "@angular/platform-browser-dynamic": "^7.0.0",
+    "@angular/router": "^7.0.0",
+    "core-js": "^2.0.0",
+    "rxjs": "^6.0.0",
+    "whatwg-fetch": "^3.0.0",
+    "zone.js": "^0.8.0"
+  },
+  "devDependencies": {
+    "@ngtools/webpack": "*",
+    "@types/jest": "*",
+    "@types/node": "*",
+    "@types/webpack-env": "*",
+    "angular2-template-loader": "*",
+    "autoprefixer": "*",
+    "babel-core": "*",
+    "babel-jest": "*",
+    "css-loader": "*",
+    "file-loader": "*",
+    "html-loader": "*",
+    "html-webpack-plugin": "*",
+    "jest": "*",
+    "jest-localstorage-mock": "*",
+    "jest-preset-angular": "*",
+    "mini-css-extract-plugin": "*",
+    "ng-router-loader": "*",
+    "node-sass": "*",
+    "null-loader": "*",
+    "postcss-loader": "*",
+    "raw-loader": "*",
+    "rimraf": "*",
+    "sass-loader": "*",
+    "style-loader": "*",
+    "stylelint": "*",
+    "stylelint-config-standard": "*",
+    "ts-loader": "*",
+    "tslib": "*",
+    "tslint": "*",
+    "tslint-loader": "*",
+    "typescript": "*",
+    "url-loader": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.spec.json"
+      }
+    },
+    "preset": "jest-preset-angular",
+    "setupFiles": [
+      "whatwg-fetch",
+      "jest-localstorage-mock"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/setup-jest.ts"
+  }
+}

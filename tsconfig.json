@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noEmitHelpers": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "target": "es5",
+    "sourceMap": true,
+    "strict": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "lib": [
+      "dom",
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2018"
+    ]
+  },
+  "files": [
+    "src/main.ts",
+    "src/references.d.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "setup-jest.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "coverage",
+    "dist",
+    "www"
+  ]
+}
