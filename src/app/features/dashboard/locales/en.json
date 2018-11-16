@@ -1,0 +1,11 @@
+{
+  "dateEnd": "End date",
+  "dateStart": "Start date",
+  "errorRetrievingData": "An error occured during data fetch<br/>Please try to decrease dates range",
+  "expenditure": "Expenditure",
+  "invalidDate": "Invalid date {{text}}",
+  "invalidDateRange": "Invalid date range",
+  "requiredField": "Required field",
+  "revenue": "Revenue",
+  "total": "Total"
+}

@@ -1,0 +1,15 @@
+@import "../../../../style/variables";
+
+:host {
+  flex: 1;
+}
+
+.dashboard-form {
+  &__container {
+    padding: $spacing-md;
+  }
+
+  &__feedback {
+    color: map-get($colors, matError);
+  }
+}

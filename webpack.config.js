@@ -10,6 +10,12 @@ const port = parseInt(process.env.PORT, 10) || 3000;
 const host = process.env.HOST || 'localhost';
 const version = process.env.VERSION || require('./package.json').version;
 const mode = isProd ? 'production' : 'development';
+let env;
+try {
+  env = require('./env.json');
+} catch {
+  env = JSON.parse(process.env.ENV || '{}');
+}
 
 // Helper functions
 function root(args) {
@@ -32,8 +38,12 @@ const postcssOptions = {
   ],
 };
 
-const makeWebpackConfig = (entry, { env } = {}) => {
-  const fontsQuery = '&limit=65000&publicPath=./&name=fonts/[name].[hash].[ext]?';
+const makeWebpackConfig = ({
+  entry,
+  buildEnv = {},
+  disableAot = false,
+}) => {
+  const isAot = isProd && !disableAot;
 
   const webpackConfig = {
     mode,
@@ -46,7 +56,7 @@ const makeWebpackConfig = (entry, { env } = {}) => {
       rules: [
         {
           test: /\.ts$/,
-          use: isProd
+          use: isAot
             ? [
               { loader: '@ngtools/webpack' },
             ]
@@ -55,6 +65,11 @@ const makeWebpackConfig = (entry, { env } = {}) => {
               { loader: 'angular2-template-loader' },
               { loader: 'ts-loader' },
             ],
+        },
+        {
+          test: /\.(png|gif|svg)$/,
+          include: root('src'),
+          loader: 'file-loader?name=images/[name].[ext]?[hash]',
         },
         {
           test: /\.scss$/,
@@ -82,10 +97,14 @@ const makeWebpackConfig = (entry, { env } = {}) => {
               { loader: 'sass-loader' },
             ],
         },
+        {
+          test: /[\/\\]@angular[\/\\]core[\/\\].+\.js$/,
+          parser: { system: true },
+        },
       ],
     },
     resolve: {
-      extensions: ['.ts', '.js', '.scss'],
+      extensions: ['.ts', '.js', '.scss', '.svg', '.png', '.gif'],
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -95,7 +114,7 @@ const makeWebpackConfig = (entry, { env } = {}) => {
             version,
             mode,
           },
-          ...env,
+          ...buildEnv,
         }),
       }),
       new HtmlWebpackPlugin({
@@ -112,14 +131,11 @@ const makeWebpackConfig = (entry, { env } = {}) => {
     },
   };
 
-  if (isProd) {
+  if (isAot) {
     webpackConfig.plugins.push(
       new AngularCompilerPlugin({
         tsConfigPath: root('tsconfig.aot.json'),
         entryModule: root('src', 'app', 'app.module#AppModule'),
-      }),
-      new MiniCssExtractPlugin({
-        filename: '[name].[hash].css',
       }));
   } else {
     webpackConfig.plugins.push(
@@ -128,34 +144,47 @@ const makeWebpackConfig = (entry, { env } = {}) => {
         root('src')));
   }
 
+  if (isProd) {
+    webpackConfig.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: '[name].[hash].css',
+        chunkFilename: '[id].[hash].css',
+      }));
+  }
+
   return webpackConfig;
 };
 
 module.exports = makeWebpackConfig({
-  'app': './src/main.ts',
-  'ie-polyfills': [
-    'core-js/es6/array',
-    'core-js/es6/date',
-    'core-js/es6/function',
-    'core-js/es6/map',
-    'core-js/es6/math',
-    'core-js/es6/number',
-    'core-js/es6/object',
-    'core-js/es6/parse-float',
-    'core-js/es6/parse-int',
-    'core-js/es6/reflect',
-    'core-js/es6/regexp',
-    'core-js/es6/set',
-    'core-js/es6/string',
-    'core-js/es6/symbol',
-    'core-js/es6/weak-map',
-    'whatwg-fetch',
-  ],
-  'polyfills': [
-    'core-js/es7/array',
-    'core-js/es7/reflect',
-    'reflect-metadata',
-    'zone.js/dist/zone',
-    'whatwg-fetch',
-  ],
+  entry: {
+    'app': './src/main.ts',
+    'ie-polyfills': [
+      'core-js/es6/array',
+      'core-js/es6/date',
+      'core-js/es6/function',
+      'core-js/es6/map',
+      'core-js/es6/math',
+      'core-js/es6/number',
+      'core-js/es6/object',
+      'core-js/es6/parse-float',
+      'core-js/es6/parse-int',
+      'core-js/es6/reflect',
+      'core-js/es6/regexp',
+      'core-js/es6/set',
+      'core-js/es6/string',
+      'core-js/es6/symbol',
+      'core-js/es6/weak-map',
+      'whatwg-fetch',
+    ],
+    'polyfills': [
+      'core-js/es7/array',
+      'core-js/es7/reflect',
+      'reflect-metadata',
+      'zone.js/dist/zone',
+      'whatwg-fetch',
+    ],
+  },
+  buildEnv: env,
+  // TODO: find why
+  disableAot: true,
 });

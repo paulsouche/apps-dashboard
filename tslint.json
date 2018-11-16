@@ -8,6 +8,8 @@
     ]
   },
   "rules": {
+    "interface-name": false,
+    "member-access": false,
     "no-console": [
       true,
       "log",
@@ -17,7 +19,11 @@
     "no-reference": false,
     "no-submodule-imports": [
       true,
-      "@angular/core/testing"
+      "@angular/cdk/layout",
+      "@angular/common/locales",
+      "@angular/core/testing",
+      "@angular/platform-browser/animations",
+      "rxjs/operators"
     ],
     "quotemark": [
       true,

@@ -1,0 +1,26 @@
+@import "../../../style/variables";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - #{$toolbar-height});
+}
+
+.dashboard-page {
+  &__spinner {
+    // ie 11 hack
+    flex: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__error {
+    // ie 11 hack
+    flex: 5;
+    margin: $spacing-md;
+    color: red;
+    text-align: center;
+    margin-top: $spacing-lg;
+  }
+}

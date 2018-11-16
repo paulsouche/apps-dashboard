@@ -43,3 +43,19 @@ To build spa
 ```
 yarn build
 ```
+
+### Env
+
+An `env.json` file can be added to the project to configure voodoo API. The schema is
+
+```json
+{
+  "voodoo": {
+    "endPoint": "{protocol}://{host}:{port]",
+    "acquisitionKey":"{yourAcquisitionKey}",
+    "monetizationKey": "{yourMonetizationKey}"
+  }
+}
+```
+
+On a CI you can serialize this config in `ENV` variable
