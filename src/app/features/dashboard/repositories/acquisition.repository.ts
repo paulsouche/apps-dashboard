@@ -31,7 +31,8 @@ export class AcquisitionRepository {
   }
 
   public async getAcquisitions(range: AcquisitionRange): Promise<{ data: AcquisitionDto[] }> {
-    const response = await this.doRequest(`${this.endPoint}/acquisition?${this.getQueryParams(range)}`);
+    const response = await this
+      .doRequest(`https://cors-anywhere.herokuapp.com/${this.endPoint}/acquisition?${this.getQueryParams(range)}`);
     const { headers, status } = response;
     if (status >= 300) {
       throw response;
