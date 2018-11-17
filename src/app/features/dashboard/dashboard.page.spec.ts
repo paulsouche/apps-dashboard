@@ -11,7 +11,7 @@ const end = new Date();
 start.setDate(start.getDate() - 1);
 
 const initAcquisitionUrl = [
-  'http://host:port/acquisition?api_key=acquisitionKey&start=',
+  'https://cors-anywhere.herokuapp.com/http://host:port/acquisition?api_key=acquisitionKey&start=',
   start.toISOString().slice(0, 10),
   '&end=',
   end.toISOString().slice(0, 10),
@@ -95,7 +95,7 @@ describe('Dashboard Page', () => {
     end2.setDate(end.getDate() + 1);
 
     const refreshAcquisitionUrl = [
-      'http://host:port/acquisition?api_key=acquisitionKey&start=',
+      'https://cors-anywhere.herokuapp.com/http://host:port/acquisition?api_key=acquisitionKey&start=',
       start.toISOString().slice(0, 10),
       '&end=',
       end2.toISOString().slice(0, 10),
