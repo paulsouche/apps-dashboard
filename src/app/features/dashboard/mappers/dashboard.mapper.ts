@@ -74,6 +74,8 @@ export class DashboardMapper {
       pinned: 'left',
     };
 
+    const totalField = this.totalField;
+
     const {
       cols,
       rows,
@@ -82,8 +84,13 @@ export class DashboardMapper {
     } = this.getTableDimensions(detail);
 
     const totalRow: RowData = {
-      row: this.totalField,
+      row: totalField,
       type: 'group',
+    };
+
+    const totalCol: DashboardColDef = {
+      field: totalField,
+      headerName: totalField,
     };
 
     cols
@@ -94,6 +101,16 @@ export class DashboardMapper {
             r[field] = `=ctx.sumGroup('${r.row}','${field}')`;
             r.children.forEach((c) => c[field] = `=ctx.sumSubGroup('${r.row}','${c.row}','${field}')`);
           });
+      });
+
+    totalRow[totalField] = `=ctx.sumTable()`;
+    rows
+      .forEach((r) => {
+        r[totalField] = `=ctx.sumTableGroup('${r.row}')`;
+        r.children.forEach((c) => {
+          c[totalField] = `=ctx.sumTableSubGroup('${r.row}','${c.row}')`;
+          c.children.forEach((l) => l[totalField] = `=ctx.sumTableRow('${r.row}','${c.row}', '${l.row}')`);
+        });
       });
 
     const context = {
@@ -111,17 +128,48 @@ export class DashboardMapper {
           : knownRevenueApps[group];
 
         let amount: number;
-        const lol = Object.values(apps)
+        return Object.values(apps)
           // tslint:disable-next-line:no-conditional-assignment
           .reduce((p, n) => (n && (amount = n[col] as number))
             ? Math.round((p * 100 + amount * 100)) / 100
             : p, 0);
-        return lol;
+      },
+      sumTable: () => {
+        return rows.reduce((p, { row }) => Math.round(p * 100 + context.sumTableGroup(row) * 100) / 100, 0);
+      },
+      sumTableGroup: (group: string) => {
+        return Math.round(
+          context.sumTableSubGroup(group, this.revenueKey) * 100 -
+          context.sumTableSubGroup(group, this.expenditureKey) * 100) / 100;
+      },
+      sumTableRow: (group: string, row: 'expenditure' | 'revenue', app: string) => {
+        const line = row === this.expenditureKey
+          ? knownExpenditureApps[group][app]
+          : knownRevenueApps[group][app];
+
+        return cols.reduce((p, { field }) => {
+          if (line) {
+            return Math.round(p * 100 + (line[field] as number) * 100) / 100;
+          }
+          return p;
+        }, 0);
+      },
+      sumTableSubGroup: (group: string, row: 'expenditure' | 'revenue') => {
+        const apps = row === this.expenditureKey
+          ? knownExpenditureApps[group]
+          : knownRevenueApps[group];
+        return Object.values(apps)
+          .reduce((p, n) => {
+            if (n) {
+              return Math.round(p * 100 + context.sumTableRow(group, row, n.row) * 100) / 100;
+            }
+            return p;
+          }, 0);
       },
     };
 
     return {
-      columnDefs: [columnStart, ...cols],
+      columnDefs: [columnStart, ...cols, totalCol],
       context,
       enableCellExpressions: true,
       rowData: [...rows, totalRow],
